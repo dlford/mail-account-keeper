@@ -35,7 +35,7 @@ func run(c *config.AccountConfig, s *gocron.Scheduler) {
 	fmt.Printf("Sending mail from account \"%s\"...\n", c.Title)
 	// TODO: Implement
 	time.Sleep(1 * time.Second)
-	fmt.Println("Done!")
+	fmt.Printf("Successfully sent mail from account \"%s\"!\n", c.Title)
 
 	_, next := s.NextRun()
 	fmt.Printf("Next send for account \"%s\" scheduled at %s\n", c.Title, next)
