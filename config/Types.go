@@ -1,15 +1,16 @@
 package config
 
 type Config struct {
-	AccountConfigs []AccountConfig `yaml:"accounts"`
-	Schedule       string          `yaml:"schedule"`
+	AccountConfigs []AccountConfig
 }
 
 type AccountConfig struct {
-	Title    string `yaml:"title"`
-	Host     string `yaml:"host"`
-	Port     int    `yaml:"port"`
-	TLS      bool   `yaml:"tls"`
-	Username string `yaml:"username"`
-	Password string `yaml:"password"`
+	Title    string `json:"title"`
+	Host     string `json:"host"`
+	Port     int    `json:"port"`
+	TLS      bool   `json:"tls"`
+	Username string `json:"username"`
+	Password string `json:"password"`
+	MailTo   string `json:"mailTo"`
+	Schedule string `json:"schedule"`
 }

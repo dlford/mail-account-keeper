@@ -22,7 +22,7 @@ func main() {
 		go func(c_lc config.AccountConfig, c_s *gocron.Scheduler) {
 			wg.Add(1)
 			defer wg.Done()
-			s.Cron(c.Schedule).Do(run, &c_lc, c_s)
+			s.Cron(c_lc.Schedule).Do(run, &c_lc, c_s)
 			s.StartBlocking()
 		}(lc, s)
 		run(&lc, s)

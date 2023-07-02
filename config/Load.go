@@ -1,52 +1,49 @@
 package config
 
 import (
+	"encoding/json"
+	"flag"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"os"
-
-	"gopkg.in/yaml.v2"
 )
 
 func (c *Config) Load(v string) *Config {
-	help := "Usage: mail-account-keeper [-v|--version] | [-c|--config path/to/config.yml]"
+	help := "Usage: mail-account-keeper [--version] | --accounts \"[...]\""
 
-	var path string
-	if len(os.Args) > 1 {
-		switch os.Args[1] {
-		case "-v", "--version":
-			fmt.Println(v)
-			os.Exit(0)
-			break
-		case "-c", "--config":
-			if len(os.Args) < 3 {
-				fmt.Println(help)
-				os.Exit(1)
-			}
-			path = os.Args[2]
-			break
-		default:
-			fmt.Println(help)
-			os.Exit(1)
-		}
-	}
-	if path == "" {
-		path = "/etc/blocklister.yml"
+	showVersion := flag.Bool("version", false, "Show version")
+
+	accountsJSONFlag := flag.String("accounts", "", "JSON string of accounts to send mail from")
+	accountsJSONEnv := os.Getenv("MAIL_ACCOUNT_KEEPER_ACCOUNTS")
+
+	var accountsJSON string
+
+	flag.Parse()
+
+	if *showVersion {
+		fmt.Printf(v)
+		os.Exit(0)
 	}
 
-	fmt.Printf("Starting Blocklister %s...\n", v)
+	if *accountsJSONFlag != "" {
+		accountsJSON = *accountsJSONFlag
+	} else if accountsJSONEnv != "" {
+		accountsJSON = accountsJSONEnv
+	} else {
+		fmt.Println(help)
+		os.Exit(1)
+	}
 
-	yamlFile, err := ioutil.ReadFile(path)
+	var accounts []AccountConfig
+	err := json.Unmarshal([]byte(accountsJSON), &accounts)
+
 	if err != nil {
-		log.Fatalf("Cannot read config file: %s\n#%v", path, err)
+		log.Fatalf("Error parsing accounts JSON: %v", err)
 	}
 
-	err = yaml.Unmarshal(yamlFile, c)
-	if err != nil {
-		log.Fatalf("Cannot unmarshal config file: %v", err)
-	}
+	fmt.Printf("Starting mail-account-keeper %s...\n", v)
 
-	fmt.Printf("Loaded configuration file: %s\n", path)
+	c.AccountConfigs = accounts
+
 	return c
 }
