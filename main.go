@@ -31,24 +31,12 @@ func main() {
 	wg.Wait()
 }
 
-func run(m *config.AccountConfig, s *gocron.Scheduler) {
-	fmt.Printf("Sending mail from account %s...\n", m.Title)
+func run(c *config.AccountConfig, s *gocron.Scheduler) {
+	fmt.Printf("Sending mail from account \"%s\"...\n", c.Title)
 	// TODO: Implement
-	// start := time.Now()
+	time.Sleep(1 * time.Second)
+	fmt.Println("Done!")
 
-	/*
-		l, err := blocklist.CreateList(m)
-		if err != nil {
-			fmt.Printf("Error fetching blocklist %s: %v\n", l.Title, err)
-			return
-		}
-
-		err = runner.ProcessList(l, &start)
-		if err != nil {
-			fmt.Printf("Error updating blocklist %s: %v\n", l.Title, err)
-		}
-	*/
-
-	// _, next := s.NextRun()
-	// fmt.Printf("Next update for blocklist %s scheduled at %s\n", l.Title, next)
+	_, next := s.NextRun()
+	fmt.Printf("Next send for account \"%s\" scheduled at %s\n", c.Title, next)
 }
