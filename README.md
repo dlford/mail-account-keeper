@@ -13,7 +13,7 @@ Create a JSON array of the accounts you'd like to preserve, in the following syn
     "host": "smtp.your-mail-host.com",
     "port": 587,
     "email": "you@your-mail-host.com",
-    "username": "username to access your email account, use your email address if you don't have one",
+    "username": "username to access your email account, omit if email is username",
     "password": "your secret password (better to create an app password where possible)",
     "mail_to": "email address to send the messages to",
     "schedule": "0 0 1 * *"
@@ -23,6 +23,8 @@ Create a JSON array of the accounts you'd like to preserve, in the following syn
 
 `schedule` should be written in cron syntax.
 
+`username` should be omitted if `email` is your username for logging into the email account.
+
 If you'd like alerts for failed sends, you'll need a JSON object for an alert account:
 
 ```json
@@ -30,7 +32,7 @@ If you'd like alerts for failed sends, you'll need a JSON object for an alert ac
   "host": "smtp.your-mail-host.com",
   "port": 587,
   "email": "you@your-mail-host.com",
-  "username": "username to access your email account, use your email address if you don't have one",
+  "username": "username to access your email account, omit if email is username",
   "password": "your secret password or app key",
   "mail_to": "you@your-mail-host.com"
 }
