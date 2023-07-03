@@ -11,7 +11,7 @@ import (
 	"mail-account-keeper/mail"
 )
 
-var Version string = "v1.0.0"
+var Version string = "v1.1.0"
 
 func main() {
 	var c config.Config
@@ -21,22 +21,22 @@ func main() {
 
 	for _, lc := range c.AccountConfigs {
 		s := gocron.NewScheduler(time.Local)
-		go func(c_lc config.AccountConfig, c_s *gocron.Scheduler) {
+		go func(c_lc config.AccountConfig, c_s *gocron.Scheduler, c_al *config.AlertConfig) {
 			wg.Add(1)
 			defer wg.Done()
-			s.Cron(c_lc.Schedule).Do(run, &c_lc, c_s)
+			s.Cron(c_lc.Schedule).Do(run, &c_lc, c_s, c_al)
 			s.StartBlocking()
-		}(lc, s)
-		run(&lc, s)
+		}(lc, s, &c.AlertConfig)
+		run(&lc, s, &c.AlertConfig)
 	}
 
 	wg.Wait()
 }
 
-func run(c *config.AccountConfig, s *gocron.Scheduler) {
+func run(c *config.AccountConfig, s *gocron.Scheduler, a *config.AlertConfig) {
 	fmt.Printf("Sending mail from account \"%s\"...\n", c.Title)
 
-	mail.Send(c)
+	mail.Send(c, a)
 
 	_, next := s.NextRun()
 	fmt.Printf("Next send for account \"%s\" scheduled at %s\n", c.Title, next)
