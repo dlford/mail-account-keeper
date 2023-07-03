@@ -8,9 +8,8 @@ type AccountConfig struct {
 	Title    string `json:"title"`
 	Host     string `json:"host"`
 	Port     int    `json:"port"`
-	TLS      bool   `json:"tls"`
-	Username string `json:"username"`
+	Email    string `json:"email"`
 	Password string `json:"password"`
-	MailTo   string `json:"mailTo"`
+	MailTo   string `json:"mail_to"`
 	Schedule string `json:"schedule"`
 }

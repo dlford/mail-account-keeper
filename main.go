@@ -2,11 +2,13 @@ package main
 
 import (
 	"fmt"
-	"mail-account-keeper/config"
 	"sync"
 	"time"
 
 	"github.com/go-co-op/gocron"
+
+	"mail-account-keeper/config"
+	"mail-account-keeper/mail"
 )
 
 var Version string = "v1.0.0"
@@ -33,9 +35,8 @@ func main() {
 
 func run(c *config.AccountConfig, s *gocron.Scheduler) {
 	fmt.Printf("Sending mail from account \"%s\"...\n", c.Title)
-	// TODO: Implement
-	time.Sleep(1 * time.Second)
-	fmt.Printf("Successfully sent mail from account \"%s\"!\n", c.Title)
+
+	mail.Send(c)
 
 	_, next := s.NextRun()
 	fmt.Printf("Next send for account \"%s\" scheduled at %s\n", c.Title, next)
