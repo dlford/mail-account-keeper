@@ -11,7 +11,7 @@ import (
 	"mail-account-keeper/mail"
 )
 
-var Version string = "v1.1.0"
+var Version string = "v2.0.0"
 
 func main() {
 	var c config.Config

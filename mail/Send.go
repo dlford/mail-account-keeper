@@ -18,7 +18,7 @@ func Send(c *config.AccountConfig, a *config.AlertConfig) {
 	m.SetHeader("Subject", "mail-account-keeper")
 	m.SetBody("text/plain", "This message was sent via github.com/dlford/mail-account-keeper to protect the account \""+c.Title+"\" from auto-deletion.")
 
-	d := gomail.NewDialer(c.Host, c.Port, c.Email, c.Password)
+	d := gomail.NewDialer(c.Host, c.Port, c.Username, c.Password)
 
 	if err := d.DialAndSend(m); err != nil {
 		fmt.Printf("Failed to send mail from account \"" + c.Title + "\": ")
@@ -29,7 +29,7 @@ func Send(c *config.AccountConfig, a *config.AlertConfig) {
 			am.SetHeader("To", a.MailTo)
 			am.SetHeader("Subject", "mail-account-keeper failed to send mail")
 			am.SetBody("text/plain", "Failed to send mail from account \""+c.Title+"\"!\n\n"+err.Error())
-			ad := gomail.NewDialer(a.Host, a.Port, a.Email, a.Password)
+			ad := gomail.NewDialer(a.Host, a.Port, a.Username, a.Password)
 			if err := ad.DialAndSend(am); err != nil {
 				fmt.Printf("Failed to send alert from account \"" + a.Email + "\": ")
 				fmt.Println(err)
