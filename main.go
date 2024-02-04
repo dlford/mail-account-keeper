@@ -27,7 +27,9 @@ func main() {
 			s.Cron(c_lc.Schedule).Do(run, &c_lc, c_s, c_al)
 			s.StartBlocking()
 		}(lc, s, &c.AlertConfig)
-		run(&lc, s, &c.AlertConfig)
+		if c.RunOnStart {
+			run(&lc, s, &c.AlertConfig)
+		}
 	}
 
 	wg.Wait()

@@ -9,17 +9,20 @@ import (
 )
 
 func (c *Config) Load(v string) *Config {
-	help := "Usage: mail-account-keeper [--version] | --accounts \"[...]\""
+	help := "Usage: mail-account-keeper [--version] | --accounts \"[...]\" [--run-on-start]"
 
 	showVersion := flag.Bool("version", false, "Show version")
 
 	accountsJSONFlag := flag.String("accounts", "", "JSON string of accounts to send mail from")
 	alertsJSONFlag := flag.String("alerts", "", "JSON string of accounts to send alerts to")
+	runOnStartFlag := flag.Bool("run-on-start", false, "Run mail sending on startup")
 	accountsJSONEnv := os.Getenv("MAIL_ACCOUNT_KEEPER_ACCOUNTS")
 	alertsJSONEnv := os.Getenv("MAIL_ACCOUNT_KEEPER_ALERTS")
+	runOnStartEnv := os.Getenv("MAIL_ACCOUNT_KEEPER_RUN_ON_START")
 
 	var accountsJSON string
 	var alertsJSON string
+	var runOnStart bool
 
 	flag.Parse()
 
@@ -42,6 +45,16 @@ func (c *Config) Load(v string) *Config {
 	} else if alertsJSONEnv != "" {
 		alertsJSON = alertsJSONEnv
 	}
+
+	if *runOnStartFlag == true {
+		runOnStart = true
+	} else if runOnStartEnv == "true" {
+		runOnStart = true
+	} else {
+		runOnStart = false
+	}
+
+	c.RunOnStart = runOnStart
 
 	var accounts []AccountConfig
 	err := json.Unmarshal([]byte(accountsJSON), &accounts)

@@ -3,6 +3,7 @@ package config
 type Config struct {
 	AccountConfigs []AccountConfig
 	AlertConfig    AlertConfig
+	RunOnStart     bool
 }
 
 type AccountConfig struct {
